@@ -84,18 +84,18 @@ def solver(number_str):
 
 	# prints out all solutions
 	for solution in solutions:
-		print solution
+		print(solution)
 
 	# prints out all un-evaluated expressions
 	for error_expr in error_exprs:
-		print error_expr[0], 'could not be computed because of a', error_expr[1]
+		print(error_expr[0], 'could not be computed because of a', error_expr[1])
 
 	return solutions
 
 # in order to use, run it from bash as python subway.py [number]
 if __name__ == '__main__':
 	if len(sys.argv) < 2:
-		print 'must supply argument, please call from command line as such:\n\n' + ' ' * 4 + 'python subway.py 1234\n\n'
+		print('must supply argument, please call from command line as such:\n\n' + ' ' * 4 + 'python subway.py 1234\n\n')
 		quit()
 
 	solver(sys.argv[1])
