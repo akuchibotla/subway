@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<script>
+	function revealSolutions() {
+		document.getElementById("solution").style.visibility = "visible";
+	}
+</script>
+	<title>Subway</title>
+<body>
+	<h3>{{number}}</h3>
+	{% block content %}
+	    {% if is_solvable == True %}
+			<span>It is solvable.</span>
+			<button onclick="revealSolutions()">Reveal</button>
+			<div id="solution" style="visibility: hidden">
+				<ol style="list-style: none">
+					{%for i in range(0, num_solutions)%}
+						<li>{{solutions[i]}}</li>
+					{%endfor%}
+				</ol>
+			</div>
+		{% else %}
+			<span>It is unsolvable.</span>
+    	{% endif %}
+	{% endblock content %}
+</body>
+</html>

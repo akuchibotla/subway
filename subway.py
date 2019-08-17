@@ -7,27 +7,23 @@ import multiprocessing
 error_exprs = []
 
 # function used to evaluate string expressions
-def evaluate(expr):
+def evaluate(expr, solutions):
 	try:
 		if eval(expr) == 10:
-			print expr
+			solutions.append(expr)
 	except ZeroDivisionError:
 		error_exprs.append((expr, 'zero division error'))
 	except OverflowError:
 		error_exprs.append((expr, 'overflow error'))
 	except ValueError:
 		error_exprs.append((expr, 'mathematical violation'))
+	except SyntaxError:
+		error_exprs.append((expr, 'syntax error detected'))
 
-def main():
+def solver(number_str):
 	# tolerance for long computations (usually exponents)
-	TIMEOUT = 3 # seconds
+	TIMEOUT = 1 # seconds
 
-	# in order to use, run it from bash as python subway.py [number]
-	if len(sys.argv) < 2:
-		print 'must supply argument, please call from command line as such:\n\n' + ' ' * 4 + 'python subway.py 1234\n\n'
-		quit()
-
-	number_str = sys.argv[1]
 	operands = ['+', '-', '/', '*', '**']
 
 	# adds another operand with a closing paranthesis preceeding it and an openening paranthesis proceeding it
@@ -41,11 +37,13 @@ def main():
 		operands_with_parentheses.append(')' + operand + '(')
 
 	# the None value is used to join numbers together rather than separate them with an operand
-	operands.append(None)
+	# operands.append(None)
 
 	# provides all combinations of operands to fill the n-1 slots in a number
 	possible_operand_combinations = list(itertools.product(operands + operands_with_parentheses, repeat=len(number_str) - 1))
 
+	manager = multiprocessing.Manager()
+	solutions = manager.list()
 	# kicks off the evaluation process by constructing the expr string
 	for possible_operand_combination in possible_operand_combinations:
 		# wraps expression in paranthesis
@@ -75,8 +73,7 @@ def main():
 			expr = expr[:parentheses.end() - 1 - subtract] + expr[parentheses.end() - subtract:]
 			subtract += 1
 
-		# this is how timeout functionality is attained
-		process = multiprocessing.Process(target=evaluate, args=(expr,))
+		process = multiprocessing.Process(target=evaluate, args=(expr, solutions))
 		process.start()
 		process.join(TIMEOUT)
 
@@ -85,9 +82,20 @@ def main():
 			process.terminate()
 			process.join()
 
+	# prints out all solutions
+	for solution in solutions:
+		print solution
+
 	# prints out all un-evaluated expressions
 	for error_expr in error_exprs:
 		print error_expr[0], 'could not be computed because of a', error_expr[1]
 
+	return solutions
+
+# in order to use, run it from bash as python subway.py [number]
 if __name__ == '__main__':
-	main()
+	if len(sys.argv) < 2:
+		print 'must supply argument, please call from command line as such:\n\n' + ' ' * 4 + 'python subway.py 1234\n\n'
+		quit()
+
+	solver(sys.argv[1])

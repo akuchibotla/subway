@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<script>
+	function submitActionHandler() {
+		var number = document.getElementById("number").value.trim();
+		if (number.length != 4) {
+			alert("Please enter a 4 digit number");
+		}
+		else {
+			window.location.href = window.location.href + number;
+		}
+	}
+</script>
+	<title>Subway</title>
+<body>
+	<h3>Enter 4-digit subway number</h3>
+	<input type="text" id="number">
+	<button id="submit" value="Submit" onclick="submitActionHandler()">Submit</button>
+</body>
+</html>
