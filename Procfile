@@ -1,1 +1,1 @@
-web: gunicorn subway.app:app
+web: gunicorn app:app
