@@ -14,4 +14,3 @@ six==1.10.0
 urllib3==1.24.1
 Werkzeug==0.15.5
 WTForms==2.2.1
-yasm==0.0

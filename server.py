@@ -27,7 +27,6 @@ def solution(number):
 		with open(file_name, 'w') as outfile:
 			json.dump(solutions, outfile)
 
-	print 'solutions', solutions
 	num_solutions = len(solutions)
 	is_solvable = num_solutions > 0
 	return render_template('solution.html', number=number, solutions=solutions, num_solutions=num_solutions, is_solvable=is_solvable)
